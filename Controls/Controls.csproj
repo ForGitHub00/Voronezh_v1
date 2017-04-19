@@ -4,18 +4,16 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{B644455D-1BF9-4E3C-AC66-E8B21FED5391}</ProjectGuid>
-    <OutputType>WinExe</OutputType>
-    <RootNamespace>Voronezh_v1</RootNamespace>
-    <AssemblyName>Voronezh_v1</AssemblyName>
+    <ProjectGuid>{1D5B8173-4B66-425B-865D-57756C38368D}</ProjectGuid>
+    <OutputType>library</OutputType>
+    <RootNamespace>Controls</RootNamespace>
+    <AssemblyName>Controls</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <WarningLevel>4</WarningLevel>
-    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -25,7 +23,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -41,7 +38,6 @@
     <PlatformTarget>x64</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-    <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
     <OutputPath>bin\x64\Release\</OutputPath>
@@ -51,65 +47,46 @@
     <PlatformTarget>x64</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-    <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="OxyPlot, Version=1.0.0.0, Culture=neutral, PublicKeyToken=638079a8f0bd61e9, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\x64\Debug\OxyPlot.dll</HintPath>
+    </Reference>
+    <Reference Include="OxyPlot.Wpf, Version=1.0.0.0, Culture=neutral, PublicKeyToken=75e952ba404cdbb0, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\x64\Debug\OxyPlot.Wpf.dll</HintPath>
+    </Reference>
     <Reference Include="SciChart.Charting, Version=4.2.2.9777, Culture=neutral, PublicKeyToken=b55dd9efe817e823, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\Desktop\chart\SciChart_SimplePointCloud3DChart\bin\Debug\SciChart.Charting.dll</HintPath>
+      <HintPath>bin\x64\Debug\SciChart.Charting.dll</HintPath>
     </Reference>
     <Reference Include="SciChart.Charting3D, Version=4.2.2.9777, Culture=neutral, PublicKeyToken=b55dd9efe817e823, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\Desktop\chart\SciChart_SimplePointCloud3DChart\bin\Debug\SciChart.Charting3D.dll</HintPath>
+      <HintPath>bin\x64\Debug\SciChart.Charting3D.dll</HintPath>
     </Reference>
     <Reference Include="SciChart.Core, Version=4.2.2.9777, Culture=neutral, PublicKeyToken=b55dd9efe817e823, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\Desktop\chart\SciChart_SimplePointCloud3DChart\bin\Debug\SciChart.Core.dll</HintPath>
+      <HintPath>bin\x64\Debug\SciChart.Core.dll</HintPath>
     </Reference>
     <Reference Include="SciChart.Data, Version=4.2.2.9777, Culture=neutral, PublicKeyToken=b55dd9efe817e823, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\Desktop\chart\SciChart_SimplePointCloud3DChart\bin\Debug\SciChart.Data.dll</HintPath>
+      <HintPath>bin\x64\Debug\SciChart.Data.dll</HintPath>
     </Reference>
     <Reference Include="SciChart.Drawing, Version=4.2.2.9777, Culture=neutral, PublicKeyToken=b55dd9efe817e823, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\Desktop\chart\SciChart_SimplePointCloud3DChart\bin\Debug\SciChart.Drawing.dll</HintPath>
+      <HintPath>bin\x64\Debug\SciChart.Drawing.dll</HintPath>
     </Reference>
     <Reference Include="SciChart.Drawing.DirectX, Version=4.2.2.9777, Culture=neutral, PublicKeyToken=b55dd9efe817e823, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\Desktop\chart\SciChart_SimplePointCloud3DChart\bin\Debug\SciChart.Drawing.DirectX.dll</HintPath>
+      <HintPath>bin\x64\Debug\SciChart.Drawing.DirectX.dll</HintPath>
     </Reference>
-    <Reference Include="SciChart.Examples.ExternalDependencies">
-      <HintPath>..\..\..\..\..\Desktop\chart\SciChart_SimplePointCloud3DChart\bin\Debug\SciChart.Examples.ExternalDependencies.dll</HintPath>
-    </Reference>
-    <Reference Include="SharpDX, Version=2.6.3.0, Culture=neutral, PublicKeyToken=b4dcf0f35e5521f1, processorArchitecture=MSIL">
+    <Reference Include="SciChart.Examples.ExternalDependencies, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\Desktop\chart\SciChart_SimplePointCloud3DChart\bin\Debug\SharpDX.dll</HintPath>
-    </Reference>
-    <Reference Include="SharpDX.D3DCompiler, Version=2.6.3.0, Culture=neutral, PublicKeyToken=b4dcf0f35e5521f1, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\Desktop\chart\SciChart_SimplePointCloud3DChart\bin\Debug\SharpDX.D3DCompiler.dll</HintPath>
-    </Reference>
-    <Reference Include="SharpDX.Direct3D10, Version=2.6.3.0, Culture=neutral, PublicKeyToken=b4dcf0f35e5521f1, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\Desktop\chart\SciChart_SimplePointCloud3DChart\bin\Debug\SharpDX.Direct3D10.dll</HintPath>
-    </Reference>
-    <Reference Include="SharpDX.Direct3D9, Version=2.6.3.0, Culture=neutral, PublicKeyToken=b4dcf0f35e5521f1, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\Desktop\chart\SciChart_SimplePointCloud3DChart\bin\Debug\SharpDX.Direct3D9.dll</HintPath>
-    </Reference>
-    <Reference Include="SharpDX.DXGI, Version=2.6.3.0, Culture=neutral, PublicKeyToken=b4dcf0f35e5521f1, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\Desktop\chart\SciChart_SimplePointCloud3DChart\bin\Debug\SharpDX.DXGI.dll</HintPath>
+      <HintPath>bin\x64\Debug\SciChart.Examples.ExternalDependencies.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
-    <Reference Include="System.ValueTuple, Version=4.0.1.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.ValueTuple.4.3.0\lib\netstandard1.0\System.ValueTuple.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\Desktop\chart\SciChart_SimplePointCloud3DChart\bin\Debug\System.Windows.Interactivity.dll</HintPath>
-    </Reference>
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -124,19 +101,29 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
-    <ApplicationDefinition Include="App.xaml">
+    <Page Include="LaserViewer2D.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
-    </ApplicationDefinition>
-    <Compile Include="App.xaml.cs">
-      <DependentUpon>App.xaml</DependentUpon>
-      <SubType>Code</SubType>
+    </Page>
+    <Page Include="LaserViewer3D.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Compile Include="LaserViewer2D.xaml.cs">
+      <DependentUpon>LaserViewer2D.xaml</DependentUpon>
     </Compile>
-    <Compile Include="SeamTracking.xaml.cs">
-      <DependentUpon>SeamTracking.xaml</DependentUpon>
+    <Compile Include="LaserViewer3D.xaml.cs">
+      <DependentUpon>LaserViewer3D.xaml</DependentUpon>
     </Compile>
+    <Page Include="LaserViewer3D_Control.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="LaserViewer3D_Control.xaml.cs">
+      <DependentUpon>LaserViewer3D_Control.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -154,37 +141,19 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <Page Include="SeamTracking.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\CalculateDLL\CalculateDLL.csproj">
-      <Project>{09884EF6-F708-487A-A330-97A24819029A}</Project>
+      <Project>{09884ef6-f708-487a-a330-97a24819029a}</Project>
       <Name>CalculateDLL</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Controls\Controls.csproj">
-      <Project>{1d5b8173-4b66-425b-865d-57756c38368d}</Project>
-      <Name>Controls</Name>
     </ProjectReference>
     <ProjectReference Include="..\LaserDLL\LaserDLL.csproj">
       <Project>{2fadc4c6-4680-4761-a74d-7868e982486f}</Project>
       <Name>LaserDLL</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\RSI_DLL\RSI_DLL.csproj">
-      <Project>{cc3c0258-5d01-4da1-b666-b67dc5e5da2d}</Project>
-      <Name>RSI_DLL</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

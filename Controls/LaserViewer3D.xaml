@@ -1,12 +1,14 @@
-﻿<Window x:Class="Voronezh_v1.MainWindow"
+﻿<Window x:Class="Controls.LaserViewer3D"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:Voronezh_v1"
+        xmlns:ext="http://schemas.abtsoftware.co.uk/scichart/exampleExternals"
+        xmlns:s3D="http://schemas.abtsoftware.co.uk/scichart3D"
+        xmlns:local="clr-namespace:Controls"
         mc:Ignorable="d"
-        Title="MainWindow" Height="350" Width="525">
+        Title="LaserViewer3D" Height="500" Width="500">
     <Grid>
-        
+        <local:LaserViewer3D_Control x:Name="d3" />
     </Grid>
 </Window>

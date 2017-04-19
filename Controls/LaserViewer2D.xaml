@@ -1,0 +1,64 @@
+﻿<Window x:Class="Controls.LaserViewer2D"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:oxy="clr-namespace:OxyPlot.Wpf;assembly=OxyPlot.Wpf"
+        xmlns:local="clr-namespace:Controls"
+        mc:Ignorable="d"
+        Title="LaserViewer2D" Height="900" Width="650">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+        <oxy:Plot Grid.Row="0"
+                  HorizontalContentAlignment="Stretch"
+                  VerticalContentAlignment="Stretch">
+            <oxy:Plot.Axes>
+                <oxy:LinearAxis Title="X"
+                                Position="Bottom" />
+                <oxy:LinearAxis Title="Z"
+                                Position="Left" />
+            </oxy:Plot.Axes>
+            <oxy:Plot.Series>
+
+                <oxy:LineSeries  ItemsSource="{Binding LDataXZ}" />
+                <oxy:LineSeries  ItemsSource="{Binding RDataXZ}" />
+            </oxy:Plot.Series>
+
+        </oxy:Plot>
+        <oxy:Plot Grid.Row="1"
+                  HorizontalContentAlignment="Stretch"
+                  VerticalContentAlignment="Stretch">
+            <oxy:Plot.Axes>
+                <oxy:LinearAxis Title="X"
+                                Position="Bottom" />
+                <oxy:LinearAxis Title="Y"
+                                Position="Left" />
+            </oxy:Plot.Axes>
+            <oxy:Plot.Series>
+
+                <oxy:LineSeries  ItemsSource="{Binding LDataXY}" />
+                <oxy:LineSeries  ItemsSource="{Binding RDataXY}" />
+            </oxy:Plot.Series>
+        </oxy:Plot>
+        <oxy:Plot Grid.Row="2"
+                  HorizontalContentAlignment="Stretch"
+                  VerticalContentAlignment="Stretch">
+            <oxy:Plot.Axes>
+                <oxy:LinearAxis Title="X"
+                                Position="Bottom" />
+                <oxy:LinearAxis Title="Angle"
+                                Position="Left" />
+            </oxy:Plot.Axes>
+            <oxy:Plot.Series>
+                <oxy:LineSeries  ItemsSource="{Binding RDataXA}" />
+                <oxy:LineSeries  ItemsSource="{Binding RDataXB}" />
+                <oxy:LineSeries  ItemsSource="{Binding RDataXC}" />
+            </oxy:Plot.Series>
+
+        </oxy:Plot>
+    </Grid>
+</Window>
