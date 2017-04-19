@@ -173,6 +173,23 @@ namespace LaserDLL {
             }
 
         }
+        public static double IsAngle(List<LPoint> data) {
+
+
+            double OnLine(LPoint left, LPoint right, LPoint cur, double dif = 1)
+            {
+                if (true) {
+                    double x = cur.X;
+                    double y = cur.Z;
+                    double x1 = left.X;
+                    double y1 = left.Z;
+                    double x2 = right.X;
+                    double y2 = right.Z;
+
+
+                }
+            }
+        }
     }
     public static class LVoronej {
         public static LPoint Type1_1point(List<LPoint> data, double lifting = 0) {

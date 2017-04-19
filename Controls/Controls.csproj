@@ -119,10 +119,17 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="LViewer.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="LaserViewer3D_Control.xaml.cs">
       <DependentUpon>LaserViewer3D_Control.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="LViewer.xaml.cs">
+      <DependentUpon>LViewer.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>

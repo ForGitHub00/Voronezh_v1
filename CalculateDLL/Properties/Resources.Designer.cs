@@ -61,7 +61,7 @@ namespace CalculateDLL.Properties {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на 100.
+        ///   Ищет локализованную строку, похожую на 0.
         /// </summary>
         public static string CalibX {
             get {
@@ -70,7 +70,7 @@ namespace CalculateDLL.Properties {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на 100.
+        ///   Ищет локализованную строку, похожую на 0.
         /// </summary>
         public static string CalibY {
             get {
@@ -79,7 +79,7 @@ namespace CalculateDLL.Properties {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на 100.
+        ///   Ищет локализованную строку, похожую на 0.
         /// </summary>
         public static string CalibZ {
             get {

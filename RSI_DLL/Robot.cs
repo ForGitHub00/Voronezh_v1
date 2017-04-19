@@ -172,7 +172,7 @@ namespace RSI_DLL {
             return send;
         }
 
-        public void Stoplistening() {
+        public void StopListening() {
             work = false;
             server.Client.Shutdown(SocketShutdown.Receive);
             server.Client.Close();

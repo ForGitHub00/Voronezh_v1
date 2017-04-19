@@ -14,6 +14,7 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Media.Media3D;
 using System.Windows.Shapes;
 
 namespace Controls {
@@ -24,11 +25,93 @@ namespace Controls {
         public LaserViewer3D() {
             InitializeComponent();
 
-          
+            PointMarkerCombo.Items.Add(typeof(EllipsePointMarker3D));
+            PointMarkerCombo.Items.Add(typeof(QuadPointMarker3D));
+            PointMarkerCombo.Items.Add(typeof(TrianglePointMarker3D));
+            PointMarkerCombo.Items.Add(typeof(CustomPointMarker3D));
+
+            Loaded += OnLoaded;
+
+
+        }
+
+        XyzDataSeries3D<double> xyzDataSeries3D;
+        XyzDataSeries3D<double> xyzDataSeries3D2;
+        XyzDataSeries3D<double> xyzDataSeries3D3;
+
+        private void OnLoaded(object sender, RoutedEventArgs routedEventArgs) {
+            xyzDataSeries3D = new XyzDataSeries3D<double>();
+            xyzDataSeries3D2 = new XyzDataSeries3D<double>();
+            xyzDataSeries3D3 = new XyzDataSeries3D<double>();
+
+
+           // xyzDataSeries3D.Append(-100, -100, -100);
+           // xyzDataSeries3D.Append(1000, 1000, 1000);
+
+            ScatterSeries3D.DataSeries = xyzDataSeries3D;
+            ScatterSeries3D2.DataSeries = xyzDataSeries3D2;
+            ScatterSeries3D3.DataSeries = xyzDataSeries3D3;
+
+            PointMarkerCombo.SelectedIndex = 0;
+        }
+
+        public void AddPoint(double x, double y, double z, int index = 0) {
+            if (index == 0) {
+                xyzDataSeries3D = (XyzDataSeries3D<double>)ScatterSeries3D.DataSeries;
+                xyzDataSeries3D.Append(x, y, z);
+                ScatterSeries3D.DataSeries = xyzDataSeries3D;
+                //Console.WriteLine($"Count = {xyzDataSeries3D.Count}");
+
+                //var temp = (XyzDataSeries3D<double>)PointLineSeries3D.DataSeries;
+                //if (temp == null) {
+                //    temp = new XyzDataSeries3D<double>();
+                //}
+                //temp.Append(x, y, z);
+                //PointLineSeries3D.DataSeries = temp;
+
+
+            } else if (index == 1) {
+                xyzDataSeries3D = (XyzDataSeries3D<double>)ScatterSeries3D2.DataSeries;
+                xyzDataSeries3D.Append(x, y, z);
+                ScatterSeries3D2.DataSeries = xyzDataSeries3D;
+            } else {
+                xyzDataSeries3D = (XyzDataSeries3D<double>)ScatterSeries3D3.DataSeries;
+                xyzDataSeries3D.Append(x, y, z);
+                ScatterSeries3D3.DataSeries = xyzDataSeries3D;
+            }
+        }
+        public void AddPoint(double[] mas, int index = 0) {
+            AddPoint(mas[0], mas[1], mas[2], index);
+        }
+
+            private void PointMarkerCombo_OnSelectionChanged(object sender, SelectionChangedEventArgs e) {
+            if (ScatterSeries3D != null && OpacitySlider != null && SizeSlider != null) {
+                ScatterSeries3D.PointMarker = (BasePointMarker3D)Activator.CreateInstance((Type)((ComboBox)sender).SelectedItem);
+                ScatterSeries3D.PointMarker.Fill = Colors.LimeGreen;
+                ScatterSeries3D.PointMarker.Size = (float)SizeSlider.Value;
+                ScatterSeries3D.PointMarker.Opacity = OpacitySlider.Value;
+            }
+        }
+
+        private void SizeSlider_OnValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e) {
+            if (ScatterSeries3D != null && ScatterSeries3D.PointMarker != null)
+                ScatterSeries3D.PointMarker.Size = (float)((Slider)sender).Value;
+        }
+
+        private void OpacitySlider_OnValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e) {
+            if (ScatterSeries3D != null && ScatterSeries3D.PointMarker != null)
+                ScatterSeries3D.PointMarker.Opacity = ((Slider)sender).Value;
         }
 
 
+
+
+
+
+
     }
+
+
 
     public class CustomPointMarker3D : BaseTexturePointMarker3D {
         private Texture2D _texture;

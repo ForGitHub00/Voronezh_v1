@@ -54,6 +54,13 @@
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="OxyPlot, Version=1.0.0.0, Culture=neutral, PublicKeyToken=638079a8f0bd61e9, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Controls\bin\x64\Debug\OxyPlot.dll</HintPath>
+    </Reference>
+    <Reference Include="OxyPlot.Wpf">
+      <HintPath>..\Controls\bin\x64\Debug\OxyPlot.Wpf.dll</HintPath>
+    </Reference>
     <Reference Include="SciChart.Charting, Version=4.2.2.9777, Culture=neutral, PublicKeyToken=b55dd9efe817e823, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\..\Desktop\chart\SciChart_SimplePointCloud3DChart\bin\Debug\SciChart.Charting.dll</HintPath>
@@ -135,6 +142,7 @@
     <Compile Include="SeamTracking.xaml.cs">
       <DependentUpon>SeamTracking.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Worker.cs" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">

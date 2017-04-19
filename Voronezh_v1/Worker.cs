@@ -8,29 +8,15 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
+using System.Windows.Threading;
 
 namespace Voronezh_v1 {
-    /// <summary>
-    /// Логика взаимодействия для SeamTracking.xaml
-    /// </summary>
-    public partial class SeamTracking : Window {
-        public SeamTracking() {
-            InitializeComponent();
-            //Dispatcher.Invoke(()=> {
-            //    Worker w = new Worker();
-            //    w.RobotStart();
-            //    w.LaserStart();
-            //});                             
-            Map2D = true;
-            Map3D = true;
-            Viewer2D = true;
+    public class Worker {
+        #region ctor
+        public Worker(bool map2d = true, bool map3d = true, bool viewer2d = true) {
+            Map2D = map2d;
+            Map3D = map3D;
+            Viewer2D = viewer2d;
 
             _LV = new LViewer();
             _map2d = new Map2D();
@@ -38,25 +24,11 @@ namespace Voronezh_v1 {
             _map2d_win.DataContext = _map2d;
             _map3d = new LaserViewer3D();
 
-            if (Map2D) {
-                _map2d_win.Show();
-            }
-            if (Map3D) {
+            if (map3d) {
                 _map3d.Show();
             }
-            if (Viewer2D) {
-                _LV.Show();
-            }
-
-            Start();
-        }
-        #region Start
-        private void Start() {
-            RobotStart();
-            LaserStart();
         }
         #endregion
-
         #region prop
         private bool map2D;
         public bool Map2D {
@@ -111,15 +83,9 @@ namespace Voronezh_v1 {
             void LaserThread()
             {
                 while (true) {
-                    Dispatcher.Invoke(InvokerFun);
-                    temp_x++;
-                    Thread.Sleep(360);
-                }
-                void InvokerFun()
-                {
-                    Laser.GetProfile(out double[] X, out double[] Z);
-                    List<LPoint> data = Helper.GetLaserData(X, Z, true);
-                    if (data.Count != 0) {
+                    Dispatcher.CurrentDispatcher.Invoke(()=> {
+                        Laser.GetProfile(out double[] X, out double[] Z);
+                        List<LPoint> data = Helper.GetLaserData(X, Z, true);
                         LPoint res = LVoronej.Type1_1point(data);
 
                         RPoint findPoint = Transform.Trans(new RPoint(temp_x, 0, 0, 0, 0, 0), res);
@@ -133,8 +99,12 @@ namespace Voronezh_v1 {
                         if (Map3D) {
                             _map3d.AddPoint(findPoint.ToDoubleMas());
                         }
+                    });
+                    Thread.Sleep(36);
+                }
+                void InvokerFun()
+                {
 
-                    }
 
 
                 }

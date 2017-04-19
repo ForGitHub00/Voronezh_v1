@@ -1,0 +1,31 @@
+﻿<UserControl x:Class="Controls.LViewer"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Controls"
+             xmlns:oxy="http://oxyplot.org/wpf"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300">
+    <Grid>
+        <oxy:Plot Grid.Row="0"
+                  HorizontalContentAlignment="Stretch"
+                  VerticalContentAlignment="Stretch">
+            <oxy:Plot.Axes>
+                <oxy:LinearAxis Title="X"
+                                Position="Bottom" />
+                <oxy:LinearAxis Title="Z"
+                                Position="Left" />
+            </oxy:Plot.Axes>
+            <oxy:Plot.Series>
+                <oxy:LineSeries StrokeThickness="1"
+                                MarkerType="Circle"
+                                ItemsSource="{Binding LasData}" />
+                <oxy:LineSeries MarkerType="Circle"
+                                MarkerStroke="Red"
+                                StrokeThickness="0"
+                                ItemsSource="{Binding Points}" />
+            </oxy:Plot.Series>
+        </oxy:Plot>
+    </Grid>
+</UserControl>
