@@ -190,18 +190,63 @@ namespace LaserDLL {
             int dataCount = data.Count;
             int tempCount = 0;
             int tempLenght = minLineLenght;
+            bool line = false;
+            int index = 0;
 
-            for (int i = 0; i < dataCount; i++) {
-                bool line = false;
-                while (i + tempLenght < dataCount - 1 && (countPointsOnline(data, i, i + tempLenght, diff) == tempLenght - i - 1)) {
-                    line = true;
-                    tempLenght++;
+            for (int i = 0; i < dataCount - 1; i++) {
+
+                if (i + tempLenght < dataCount) {
+                    tempCount = countPointsOnline(data, index, i + tempLenght, diff);
+                    if (tempCount == tempLenght + i - 1) {
+                        //index++;
+                        //tempLenght++;
+                        line = true;
+                    } else {
+                        if (line) {
+                            result++;
+                            i += minLineLenght - 1;
+                            index = i;
+                            line = false;
+                        } else {
+                            index = i+ 1;
+                        }
+                    }
+                } else {
+                    if (line) {
+                        result++;
+                    }
                 }
-                if (line) {
-                    result++;
-                    i += tempLenght;
-                    tempLenght = minLineLenght;
-                }
+                
+                //tempLenght = minLineLenght;
+                //while (index + tempLenght < dataCount && countPointsOnline(data, i, index + tempLenght, diff) == tempLenght - i - 1) {
+                //    tempCount = countPointsOnline(data, i, index + tempLenght, diff);
+
+                //    index++;
+                //    tempLenght++;
+                //    //Console.Write($"s = {index}  tempL = {tempLenght} ");
+                //}
+                
+                //if (tempLenght != minLineLenght) {
+                //    Console.WriteLine($"i = {i}  index = {index} tempL = {tempLenght}");
+                //    result++;
+                //}
+                //index = i;
+
+
+                //tempCount = countPointsOnline(data, i, i + tempLenght, diff);
+                //Console.Write($"s = {i}  temp = {tempCount} ");
+                //while (i + tempLenght < dataCount - 1 && (tempCount == tempLenght - i - 1)) {
+                //    tempCount = countPointsOnline(data, i, i + tempLenght, diff);
+                //    Console.Write($"  temp = {tempCount} ");
+                //    line = true;
+                //    tempLenght++;
+                //}
+                //if (line) {
+                //    Console.WriteLine($" f = {tempLenght}");
+                //    result++;
+                //    i += tempLenght;
+                //    tempLenght = minLineLenght;
+                //}
             }
             return result;
         }
@@ -215,12 +260,12 @@ namespace LaserDLL {
                 double y2 = right.Z;
 
 
-                
+
 
                 double tx = (x - x1) * (y2 - y1);
                 double ty = (y - y1) * (x2 - x1);
 
-               // Console.WriteLine(tx - ty);
+                // Console.WriteLine(tx - ty);
                 return Math.Abs(tx - ty);
             }
         }
@@ -231,7 +276,7 @@ namespace LaserDLL {
                     result++;
                 }
             }
-            Console.WriteLine(result);
+            // Console.WriteLine(result);
             return result;
         }
 
