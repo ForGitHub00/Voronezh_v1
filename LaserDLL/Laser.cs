@@ -173,23 +173,68 @@ namespace LaserDLL {
             }
 
         }
-        public static double IsAngle(List<LPoint> data) {
-
-
-            double OnLine(LPoint left, LPoint right, LPoint cur, double dif = 1)
-            {
-                if (true) {
-                    double x = cur.X;
-                    double y = cur.Z;
-                    double x1 = left.X;
-                    double y1 = left.Z;
-                    double x2 = right.X;
-                    double y2 = right.Z;
-
-
+        public static int IsAngle(List<LPoint> data, double dif = 0.15) {
+            int result = 0;
+            var point = LVoronej.Type1_1point(data);
+            for (int i = 1; i < data.Count - 1; i++) {
+                // if (Math.Abs(OnLine(data[0], data[data.Count - 1], data[i])) < dif) {
+                if (Math.Abs(pointOnLine(point, data[data.Count - 1], data[i])) < dif) {
+                    result++;
                 }
             }
+            return result;
         }
+
+        public static int GetLineCount(List<LPoint> data, double maxDistance = 3, double diff = 1, int minLineLenght = 10) {
+            int result = 0;
+            int dataCount = data.Count;
+            int tempCount = 0;
+            int tempLenght = minLineLenght;
+
+            for (int i = 0; i < dataCount; i++) {
+                bool line = false;
+                while (i + tempLenght < dataCount - 1 && (countPointsOnline(data, i, i + tempLenght, diff) == tempLenght - i - 1)) {
+                    line = true;
+                    tempLenght++;
+                }
+                if (line) {
+                    result++;
+                    i += tempLenght;
+                    tempLenght = minLineLenght;
+                }
+            }
+            return result;
+        }
+        public static double pointOnLine(LPoint left, LPoint right, LPoint cur) {
+            if (true) {
+                double x = cur.X;
+                double y = cur.Z;
+                double x1 = left.X;
+                double y1 = left.Z;
+                double x2 = right.X;
+                double y2 = right.Z;
+
+
+                
+
+                double tx = (x - x1) * (y2 - y1);
+                double ty = (y - y1) * (x2 - x1);
+
+               // Console.WriteLine(tx - ty);
+                return Math.Abs(tx - ty);
+            }
+        }
+        private static int countPointsOnline(List<LPoint> data, int start, int finish, double diff = 1) {
+            int result = 0;
+            for (int i = start + 1; i < finish; i++) {
+                if (pointOnLine(data[start], data[finish], data[i]) < diff) {
+                    result++;
+                }
+            }
+            Console.WriteLine(result);
+            return result;
+        }
+
     }
     public static class LVoronej {
         public static LPoint Type1_1point(List<LPoint> data, double lifting = 0) {

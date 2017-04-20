@@ -28,8 +28,8 @@ namespace Voronezh_v1 {
             //    w.RobotStart();
             //    w.LaserStart();
             //});                             
-            Map2D = true;
-            Map3D = true;
+            Map2D = false;
+            Map3D = false;
             Viewer2D = true;
 
             _LV = new LViewer();
@@ -110,17 +110,60 @@ namespace Voronezh_v1 {
 
             void LaserThread()
             {
+
+                Dispatcher.Invoke(() => {
+                    List<LPoint> dat = new List<LPoint>();
+                    for (int i = 0; i < 20; i++) {
+                        dat.Add(new LPoint(0, i));
+                    }
+                    for (int i = 0; i < 30; i++) {
+                        dat.Add(new LPoint(i, 20));
+                    }
+
+                    _LV.SetData(dat);
+                    Console.WriteLine(LFilters.GetLineCount(dat));
+                });
+               
+
+
+
+
+
+
                 while (true) {
                     Dispatcher.Invoke(InvokerFun);
                     temp_x++;
-                    Thread.Sleep(360);
+                    Thread.Sleep(100);
                 }
                 void InvokerFun()
                 {
+
+
+
+
+                    //LFilters.pointOnLine(new LPoint(2,-3), new LPoint(-3, 4), new LPoint(5, -1.5));
+                    //LFilters.pointOnLine(new LPoint(0, 0), new LPoint(0, 3), new LPoint(0, 2));
+
+
+
+
+                    
+
+
                     Laser.GetProfile(out double[] X, out double[] Z);
                     List<LPoint> data = Helper.GetLaserData(X, Z, true);
                     if (data.Count != 0) {
                         LPoint res = LVoronej.Type1_1point(data);
+
+                        //double tempdd = LFilters.IsAngle(data);
+                        //double prov = data.Count / 1.2;
+                        //Console.WriteLine($"{tempdd} - {prov}");
+                        //if (tempdd < prov) {
+                        //    Console.WriteLine($"BEEP!  {tempdd} - {prov}");
+                        //    Console.Beep(1000, 200);
+                        //}
+
+                        //Console.WriteLine(LFilters.GetLineCount(data));
 
                         RPoint findPoint = Transform.Trans(new RPoint(temp_x, 0, 0, 0, 0, 0), res);
                         if (Viewer2D) {
@@ -138,10 +181,12 @@ namespace Voronezh_v1 {
 
 
                 }
+
+
+
             }
 
         }
-
         #endregion
     }
 }
