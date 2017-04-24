@@ -185,6 +185,49 @@ namespace LaserDLL {
             return result;
         }
 
+        public static List<LPoint> GetLines(List<LPoint> data, double maxDistance = 3, double diff = 1, int minLineLenght = 10) {
+            List<LPoint> result = new List<LPoint>();
+            int dataCount = data.Count;
+            int tempCount = 0;
+            int tempLenght = minLineLenght;
+            bool line = false;
+            int index = 0;
+
+
+            int start = 0;
+            int finish = minLineLenght;
+
+            while (finish < dataCount) {
+                bool dist = true;
+                for (int i = start; i < finish - 1; i++) {
+                    if (distanceBetweenTwoPoints(data[i], data[i + 1]) > maxDistance) {
+                        dist = false;
+                        break;
+                    }
+                }
+                if (countPointsOnline(data, start, finish, diff, s: 1) && dist) {
+                    line = true;                   
+                    finish++;
+                } else {
+                    if (!line) {
+                        start++;
+                        finish = start + minLineLenght;
+                    } else {
+                        line = false;
+                        result.Add(data[start]);
+                        result.Add(data[finish - 1]);
+                        start = finish;
+                        finish = start + minLineLenght;
+                    }
+
+                }
+            }
+            if (line) {
+                result.Add(data[start]);
+                result.Add(data[dataCount - 1]);
+            }
+            return result;
+        }
         public static int GetLineCount(List<LPoint> data, double maxDistance = 3, double diff = 1, int minLineLenght = 10) {
             int result = 0;
             int dataCount = data.Count;
@@ -193,30 +236,88 @@ namespace LaserDLL {
             bool line = false;
             int index = 0;
 
-            for (int i = 0; i < dataCount - 1; i++) {
 
-                if (i + tempLenght < dataCount) {
-                    tempCount = countPointsOnline(data, index, i + tempLenght, diff);
-                    if (tempCount == tempLenght + i - 1) {
-                        //index++;
-                        //tempLenght++;
-                        line = true;
-                    } else {
-                        if (line) {
-                            result++;
-                            i += minLineLenght - 1;
-                            index = i;
-                            line = false;
-                        } else {
-                            index = i+ 1;
-                        }
-                    }
-                } else {
-                    if (line) {
-                        result++;
+            int start = 0;
+            int finish = minLineLenght;
+
+            while (finish < dataCount) {
+                bool dist = true;
+                for (int i = start; i < finish - 1; i++) {
+                    if (distanceBetweenTwoPoints(data[i], data[i + 1]) > maxDistance) {
+                        dist = false;
+                        break;
                     }
                 }
-                
+                if (countPointsOnline(data, start, finish, diff, s: 1) && dist) {
+                    line = true;
+                    finish++;
+                } else {
+                    if (!line) {
+                        start++;
+                        finish = start + minLineLenght;
+                    } else {
+                        line = false;
+                        result++;
+                        start = finish;
+                        finish = start + minLineLenght;
+                    }
+                   
+                }
+            }
+            if (line) {
+                result++;
+            }
+
+
+
+            //while (finish < dataCount) {
+            //    tempCount = countPointsOnline(data, start, finish, diff);
+            //    if (tempCount == finish - start - 1) {
+            //        if (line) {
+            //            start = finish - 1;
+            //            finish = start + minLineLenght;
+            //        } else {
+            //            line = true;
+            //           // result++;
+            //           // Console.WriteLine($"Finish = {finish} | Start = {start}");
+            //            finish++;
+            //        }
+            //    } else {
+            //        if (line) {
+            //            result++;
+            //            Console.WriteLine($"Finish = {finish} | Start = {start}");
+            //            line = false;
+            //        } else {
+            //            start = finish - 1;
+            //            finish = start + minLineLenght;
+            //        }
+            //    }
+            //}
+
+            for (int i = 0; i < dataCount - 1; i++) {
+                #region
+                //if (i + tempLenght < dataCount) {
+                //    tempCount = countPointsOnline(data, index, i + tempLenght, diff);
+                //    if (tempCount == tempLenght + i - 1) {
+                //        //index++;
+                //        //tempLenght++;
+                //        line = true;
+                //    } else {
+                //        if (line) {
+                //            result++;
+                //            i += tempLenght - 1;
+                //            index = i;
+                //            line = false;
+                //        } else {
+                //            index = i+ 1;
+                //        }
+                //    }
+                //} else {
+                //    if (line) {
+                //        result++;
+                //    }
+                //}
+
                 //tempLenght = minLineLenght;
                 //while (index + tempLenght < dataCount && countPointsOnline(data, i, index + tempLenght, diff) == tempLenght - i - 1) {
                 //    tempCount = countPointsOnline(data, i, index + tempLenght, diff);
@@ -225,7 +326,7 @@ namespace LaserDLL {
                 //    tempLenght++;
                 //    //Console.Write($"s = {index}  tempL = {tempLenght} ");
                 //}
-                
+
                 //if (tempLenght != minLineLenght) {
                 //    Console.WriteLine($"i = {i}  index = {index} tempL = {tempLenght}");
                 //    result++;
@@ -247,8 +348,11 @@ namespace LaserDLL {
                 //    i += tempLenght;
                 //    tempLenght = minLineLenght;
                 //}
+                #endregion
+
             }
             return result;
+
         }
         public static double pointOnLine(LPoint left, LPoint right, LPoint cur) {
             if (true) {
@@ -277,6 +381,32 @@ namespace LaserDLL {
                 }
             }
             // Console.WriteLine(result);
+            return result;
+        }
+        private static bool countPointsOnline(List<LPoint> data, int start, int finish, double diff = 1, int s = 1) {
+            int result = 0;
+            for (int i = start + 1; i < finish; i++) {
+                if (pointOnLine(data[start], data[finish], data[i]) < diff) {
+                    result++;
+                }
+            }
+            // Console.WriteLine(result);
+            if (finish - start - 1 == result) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+        private static double distanceBetweenTwoPoints(LPoint p1, LPoint p2) {
+            double result = 0;
+            double x1 = p1.X;
+            double y1 = p1.Z;
+            double x2 = p2.X;
+            double y2 = p2.Z;
+
+            result = (x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1);
+            result = Math.Sqrt(result);
+
             return result;
         }
 

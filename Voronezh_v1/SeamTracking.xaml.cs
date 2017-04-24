@@ -29,7 +29,7 @@ namespace Voronezh_v1 {
             //    w.LaserStart();
             //});                             
             Map2D = false;
-            Map3D = false;
+            Map3D = true;
             Viewer2D = true;
 
             _LV = new LViewer();
@@ -101,7 +101,7 @@ namespace Voronezh_v1 {
             int temp_x = 0;
             #endregion
 
-            Thread laser_thrd = new Thread(new ThreadStart(LaserThread));
+            Thread laser_thrd = new Thread(new ThreadStart(LaserThread2));
             laser_thrd.Start();
 
 
@@ -116,14 +116,17 @@ namespace Voronezh_v1 {
                     for (int i = 0; i < 20; i++) {
                         dat.Add(new LPoint(0, i));
                     }
-                    for (int i = 0; i < 30; i++) {
+                    for (int i = 0; i < 50; i++) {
                         dat.Add(new LPoint(i, 20));
                     }
 
                     _LV.SetData(dat);
-                    Console.WriteLine(LFilters.GetLineCount(dat));
+                    for (int i = 0; i < 60; i++) {
+                        Console.WriteLine($"i = {i}   Res = {LFilters.GetLineCount(dat, minLineLenght: i, maxDistance: 1)}");
+                    }
+
                 });
-               
+
 
 
 
@@ -133,7 +136,7 @@ namespace Voronezh_v1 {
                 while (true) {
                     Dispatcher.Invoke(InvokerFun);
                     temp_x++;
-                    Thread.Sleep(100);
+                    Thread.Sleep(500);
                 }
                 void InvokerFun()
                 {
@@ -155,15 +158,102 @@ namespace Voronezh_v1 {
                     if (data.Count != 0) {
                         LPoint res = LVoronej.Type1_1point(data);
 
-                        //double tempdd = LFilters.IsAngle(data);
-                        //double prov = data.Count / 1.2;
-                        //Console.WriteLine($"{tempdd} - {prov}");
-                        //if (tempdd < prov) {
-                        //    Console.WriteLine($"BEEP!  {tempdd} - {prov}");
-                        //    Console.Beep(1000, 200);
-                        //}
+                        double tempdd = LFilters.IsAngle(data);
+                        double prov = data.Count / 1.2;
+                       // Console.WriteLine($"{tempdd} - {prov}");
+                        if (tempdd < prov) {
+                          //  Console.WriteLine($"BEEP!  {tempdd} - {prov}");
+                            Console.Beep(1000, 200);
+                        }
 
-                        //Console.WriteLine(LFilters.GetLineCount(data));
+                        Console.WriteLine(LFilters.GetLineCount(data, minLineLenght: 50, diff: 40));
+
+                        RPoint findPoint = Transform.Trans(new RPoint(temp_x, 0, 0, 0, 0, 0), res);
+                        if (Viewer2D) {
+                            _LV.SetData(data);
+                            _LV.SetPoint(res);
+                        }
+                        if (Map2D) {
+                            _map2d.AddLaserPoint(findPoint);
+                        }
+                        if (Map3D) {
+                            _map3d.AddPoint(findPoint.ToDoubleMas());
+                        }
+
+                    }
+
+
+                }
+
+
+
+            }
+            void LaserThread2()
+            {
+
+
+
+                Dispatcher.Invoke(() => {
+                    List<LPoint> dat = new List<LPoint>();
+                    for (int i = 0; i < 20; i++) {
+                        dat.Add(new LPoint(0, i));
+                    }
+                    for (int i = 4; i < 50; i++) {
+                        dat.Add(new LPoint(i, 20));
+                    }
+
+                    _LV.SetData(dat);
+                    for (int i = 0; i < 60; i++) {
+                       // Console.WriteLine($"i = {i}   Res = {LFilters.GetLineCount(dat, minLineLenght: i, maxDistance: 1)}");
+                    }
+                    Console.WriteLine(LFilters.GetLineCount(dat, minLineLenght: 10,diff: 1, maxDistance: 1));
+                    var lines = LFilters.GetLines(dat, minLineLenght: 10, diff: 1, maxDistance: 1);
+                    _LV.SetPoints(lines);
+
+                    //FileWorker.LaserSaveOneProf(dat, "test");
+
+                    //List<List<LPoint>> tttt = new List<List<LPoint>>();
+                    //tttt.Add(dat);
+                    //tttt.Add(dat);
+                    //tttt.Add(dat);
+                    //tttt.Add(dat);
+                    //tttt.Add(dat);
+
+                    //FileWorker.LaserSaveManyProfs(tttt, "TestMany");
+
+
+                    var test = FileWorker.LaserLoadManyProfs("TestMany");
+                    Console.WriteLine(test.Count);
+                    //foreach (var item in test) {
+                    //    Console.WriteLine(item.ToString());
+                    //}
+                });
+
+
+                while (true) {
+                    Dispatcher.Invoke(InvokerFun);
+                    temp_x++;
+                    Thread.Sleep(1000);
+                }
+                void InvokerFun()
+                {
+
+                    Laser.GetProfile(out double[] X, out double[] Z);
+                    List<LPoint> data = Helper.GetLaserData(X, Z, true);
+                    if (data.Count != 0) {
+                        LPoint res = LVoronej.Type1_1point(data);
+
+                        double tempdd = LFilters.IsAngle(data);
+                        double prov = data.Count / 1.2;
+                        // Console.WriteLine($"{tempdd} - {prov}");
+                        if (tempdd < prov) {
+                            //  Console.WriteLine($"BEEP!  {tempdd} - {prov}");
+                            //Console.Beep(1000, 200);
+                        }
+
+                        Console.WriteLine(LFilters.GetLineCount(data, minLineLenght: 50, diff: 10, maxDistance: 1));
+                       // var lines = LFilters.GetLines(data, minLineLenght: 50, diff: 10, maxDistance: 1);
+                        //_LV.SetPoints(lines);
 
                         RPoint findPoint = Transform.Trans(new RPoint(temp_x, 0, 0, 0, 0, 0), res);
                         if (Viewer2D) {

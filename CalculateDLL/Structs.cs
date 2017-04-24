@@ -12,6 +12,9 @@ namespace CalculateDLL {
             X = x;
             Z = z;
         }
+        public override string ToString() {
+            return $"{X}|{Z}";
+        }
     }
     public struct RPointCoordinates {
         public double X;
@@ -29,6 +32,15 @@ namespace CalculateDLL {
         public double C;
     }
     public struct RPoint {
+        public RPoint(string str) {
+            var res = str.Split('|');
+            X = Convert.ToDouble(res[0]);
+            Y = Convert.ToDouble(res[1]);
+            Z = Convert.ToDouble(res[2]);
+            A = Convert.ToDouble(res[3]);
+            B = Convert.ToDouble(res[4]);
+            C = Convert.ToDouble(res[5]);
+        }
         public double X;
         public double Y;
         public double Z;
@@ -44,7 +56,7 @@ namespace CalculateDLL {
             C = c;
         }
         public override string ToString() {
-            return $"X = {X} | Y = {Y} | Z = {Z} | A = {A} | B = {B} | C = {C} | ";
+            return $"{X}|{Y}|{Z}|{A}|{B}|{C}";
         }
         public double[] ToDoubleMas() {
             return new double[] { X, Y, Z };
