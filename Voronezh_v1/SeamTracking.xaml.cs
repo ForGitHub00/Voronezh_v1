@@ -37,6 +37,7 @@ namespace Voronezh_v1 {
             _map2d_win = new LaserViewer2D();
             _map2d_win.DataContext = _map2d;
             _map3d = new LaserViewer3D();
+            s = Singleton.GetInstance();
 
             if (Map2D) {
                 _map2d_win.Show();
@@ -48,12 +49,12 @@ namespace Voronezh_v1 {
                 _LV.Show();
             }
 
-            Start();
+            // Start();
         }
         #region Start
         private void Start() {
             RobotStart();
-            LaserStart();
+            //LaserStart();
         }
         #endregion
 
@@ -83,6 +84,7 @@ namespace Voronezh_v1 {
         Map2D _map2d;
         LaserViewer2D _map2d_win;
         LaserViewer3D _map3d;
+        Singleton s;
         #endregion
         #region Work 
         public void RobotStart(int port = 6008) {
@@ -92,6 +94,87 @@ namespace Voronezh_v1 {
         public void RobotStop() {
             _R.exit = true;
             _R.StopListening();
+        }
+
+        public void Program1() {
+            Laser.Init();
+
+            RPoint send_point = new RPoint();
+            bool isFirst = true;
+            bool start = false;
+            bool finish = false;
+
+
+
+
+            Thread thrd = new Thread(new ThreadStart(t_work));
+            thrd.Start();
+                   
+            void t_work()
+            {
+                while (true) {
+                    Dispatcher.Invoke(InvokerFun);
+
+                    Thread.Sleep(500);
+                }
+                void InvokerFun()
+                {
+                    tb_position.Text = s.Position.ToString();
+                    tb_recive_point.Text = s.recive_p.ToString();
+                    tb_work.Text = s.work.ToString();
+                    tb_send_point.Text = send_point.ToString();
+
+                    List<RPoint> line1 = new List<RPoint>();
+                    List<RPoint> line2 = new List<RPoint>();
+
+
+                    Laser.GetProfile(out double[] X, out double[] Z);
+                    List<LPoint> data = Helper.GetLaserData(X, Z, true);
+
+                    LPoint res = LVoronej.Type1_1point(data);
+
+                    if (s.work) {
+                        start = true;
+                        if (data.Count != 0) {
+
+                            RPoint findPoint = Transform.Trans(s.Position, res);
+                            tb_cur_point.Text = findPoint.ToString();
+
+                            if (Viewer2D) {
+                                _LV.SetData(data);
+                                _LV.SetPoint(res);
+                            }
+                            if (Map2D) {
+                                _map2d.AddLaserPoint(findPoint);
+                            }
+                            if (Map3D) {
+                                _map3d.AddPoint(findPoint.ToDoubleMas());
+                            }
+
+                            if (isFirst) {
+                                line1.Add(findPoint);
+                            } else {
+                                line2.Add(findPoint);
+                            }
+                        }
+                    } else {
+                        if (start) {
+                            isFirst = false;
+                            finish = true;
+                        }
+                        if (finish) {
+                            var t = RobotCalculate.CalculatePoint_2line(line1, line2);
+                            send_point = t;
+                        }
+                    }
+
+                   
+
+                    //Dispatcher.Invoke(() => {
+
+                    //});
+                }
+            }
         }
         [STAThread]
         public void LaserStart() {
@@ -150,7 +233,7 @@ namespace Voronezh_v1 {
 
 
 
-                    
+
 
 
                     Laser.GetProfile(out double[] X, out double[] Z);
@@ -160,9 +243,9 @@ namespace Voronezh_v1 {
 
                         double tempdd = LFilters.IsAngle(data);
                         double prov = data.Count / 1.2;
-                       // Console.WriteLine($"{tempdd} - {prov}");
+                        // Console.WriteLine($"{tempdd} - {prov}");
                         if (tempdd < prov) {
-                          //  Console.WriteLine($"BEEP!  {tempdd} - {prov}");
+                            //  Console.WriteLine($"BEEP!  {tempdd} - {prov}");
                             Console.Beep(1000, 200);
                         }
 
@@ -204,9 +287,9 @@ namespace Voronezh_v1 {
 
                     _LV.SetData(dat);
                     for (int i = 0; i < 60; i++) {
-                       // Console.WriteLine($"i = {i}   Res = {LFilters.GetLineCount(dat, minLineLenght: i, maxDistance: 1)}");
+                        // Console.WriteLine($"i = {i}   Res = {LFilters.GetLineCount(dat, minLineLenght: i, maxDistance: 1)}");
                     }
-                    Console.WriteLine(LFilters.GetLineCount(dat, minLineLenght: 10,diff: 1, maxDistance: 1));
+                    Console.WriteLine(LFilters.GetLineCount(dat, minLineLenght: 10, diff: 1, maxDistance: 1));
                     var lines = LFilters.GetLines(dat, minLineLenght: 10, diff: 1, maxDistance: 1);
                     _LV.SetPoints(lines);
 
@@ -252,7 +335,7 @@ namespace Voronezh_v1 {
                         }
 
                         Console.WriteLine(LFilters.GetLineCount(data, minLineLenght: 50, diff: 10, maxDistance: 1));
-                       // var lines = LFilters.GetLines(data, minLineLenght: 50, diff: 10, maxDistance: 1);
+                        // var lines = LFilters.GetLines(data, minLineLenght: 50, diff: 10, maxDistance: 1);
                         //_LV.SetPoints(lines);
 
                         RPoint findPoint = Transform.Trans(new RPoint(temp_x, 0, 0, 0, 0, 0), res);
@@ -278,5 +361,13 @@ namespace Voronezh_v1 {
 
         }
         #endregion
+
+        private void bt_start_Click(object sender, RoutedEventArgs e) {
+            Start();
+        }
+
+        private void bt_stop_Click(object sender, RoutedEventArgs e) {
+            _R.StopListening();
+        }
     }
 }

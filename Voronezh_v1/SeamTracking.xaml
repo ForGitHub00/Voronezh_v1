@@ -5,8 +5,31 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Voronezh_v1"
         mc:Ignorable="d"
-        Title="SeamTracking" Height="300" Width="300">
+        Title="SeamTracking"
+        Height="700"
+        Width="700">
     <Grid>
-        
+        <StackPanel>
+            <Button Name="bt_start"
+                    Content="Start"
+                    Margin="5"
+                    Click="bt_start_Click">
+            </Button>
+            <TextBox Margin="5"
+                     Name="tb_position"></TextBox>
+            <TextBox Margin="5"
+                     Name="tb_work"></TextBox>
+            <TextBox Margin="5"
+                     Name="tb_recive_point"></TextBox>
+            <TextBox Margin="5"
+                     Name="tb_send_point"></TextBox>
+            <TextBox Margin="5"
+                     Name="tb_cur_point"></TextBox>
+            <Button Name="bt_stop"
+                    Content="Stop"
+                    Margin="5"
+                    Click="bt_stop_Click">
+            </Button>
+        </StackPanel>
     </Grid>
 </Window>

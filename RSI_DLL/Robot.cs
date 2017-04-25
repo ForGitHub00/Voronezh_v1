@@ -89,6 +89,35 @@ namespace RSI_DLL {
             // Console.WriteLine(sw.ElapsedMilliseconds);
             return strSend;
         }
+        private string GetData(string strRecive, string strSend) {
+            Singleton s = Singleton.GetInstance();
+
+            double x = ParserXML.GetValues(strRecive, "Rob\\RIst\\X");
+            double y = ParserXML.GetValues(strRecive, "Rob\\RIst\\Y");
+            double z = ParserXML.GetValues(strRecive, "Rob\\RIst\\Z");
+            double a = ParserXML.GetValues(strRecive, "Rob\\RIst\\A");
+            double b = ParserXML.GetValues(strRecive, "Rob\\RIst\\B");
+            double c = ParserXML.GetValues(strRecive, "Rob\\RIst\\C");
+
+            s.Position = new RPoint(x, y, z, a, b, c);
+
+            x = ParserXML.GetValues(strRecive, "Rob\\PX");
+            y = ParserXML.GetValues(strRecive, "Rob\\PY");
+            z = ParserXML.GetValues(strRecive, "Rob\\PZ");
+            a = ParserXML.GetValues(strRecive, "Rob\\PA");
+            b = ParserXML.GetValues(strRecive, "Rob\\PB");
+            c = ParserXML.GetValues(strRecive, "Rob\\PC");
+
+            s.recive_p = new RPoint(x, y, z, a, b, c);
+
+            int work = (int)ParserXML.GetValues(strRecive, "Rob\\Work");
+            s.work = Convert.ToBoolean(work);
+            if (exit) {
+                ParserXML.SetValue(ref strSend, "Sen\\Exit", 1);
+            }
+
+            return strSend;
+        }
         public Robot(int port) {
             _port = port;
             Correction = _defaultDelegate;
@@ -139,7 +168,10 @@ namespace RSI_DLL {
                         strSend = SendXML.InnerXml;
 
                         strSend = mirrorIPOC(strReceive, strSend);
-                        strSend = Correction(strReceive, strSend);
+                        //strSend = Correction(strReceive, strSend);
+                        strSend = GetData(strReceive, strSend);
+
+
 
                         byte[] msg = System.Text.Encoding.ASCII.GetBytes(strSend);
                         server.Send(msg, msg.Length, client);
