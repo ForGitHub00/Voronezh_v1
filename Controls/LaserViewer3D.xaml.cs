@@ -45,8 +45,8 @@ namespace Controls {
             xyzDataSeries3D3 = new XyzDataSeries3D<double>();
 
 
-           // xyzDataSeries3D.Append(-100, -100, -100);
-           // xyzDataSeries3D.Append(1000, 1000, 1000);
+            //xyzDataSeries3D.Append(-100, -100, -100);
+            // xyzDataSeries3D.Append(1000, 1000, 1000);
 
             ScatterSeries3D.DataSeries = xyzDataSeries3D;
             ScatterSeries3D2.DataSeries = xyzDataSeries3D2;
@@ -79,9 +79,23 @@ namespace Controls {
                 xyzDataSeries3D.Append(x, y, z);
                 ScatterSeries3D3.DataSeries = xyzDataSeries3D;
             }
+            Console.WriteLine($"+++");
         }
         public void AddPoint(double[] mas, int index = 0) {
             AddPoint(mas[0], mas[1], mas[2], index);
+        }
+
+        public void ClearPoints(int index = 0) {
+            if (index == 0) {
+                xyzDataSeries3D = new XyzDataSeries3D<double>();
+                ScatterSeries3D.DataSeries = xyzDataSeries3D;            
+            } else if (index == 1) {
+                xyzDataSeries3D = new XyzDataSeries3D<double>();
+                ScatterSeries3D2.DataSeries = xyzDataSeries3D;
+            } else {
+                xyzDataSeries3D = new XyzDataSeries3D<double>();
+                ScatterSeries3D3.DataSeries = xyzDataSeries3D;
+            }
         }
 
             private void PointMarkerCombo_OnSelectionChanged(object sender, SelectionChangedEventArgs e) {

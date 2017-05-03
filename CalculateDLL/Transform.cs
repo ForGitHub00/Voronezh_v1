@@ -13,7 +13,7 @@ namespace CalculateDLL {
             double Y = Convert.ToDouble(Resources.CalibY.Replace('.', ','));
             double Z = Convert.ToDouble(Resources.CalibZ.Replace('.', ','));
 
-            RPoint res = Transform.Trans(robP.X, robP.Y, robP.Z, robP.A, robP.B, robP.C, X, -Y + lasP.X, -(Z - lasP.Z)); //todo CalibY + X ???
+            RPoint res = Transform.Trans(robP.X, robP.Y, robP.Z, robP.A, robP.B, robP.C, X, lasP.X, lasP.Z - 300); //todo CalibY + X ???
             //RPoint res = Transform.Trans(robP.X, robP.Y, robP.Z, 0, 0, 0, CalibX, -CalibY + lasP.X, -(CalibZ - lasP.Z)); //todo CalibY + X ???
             //Map.Add(res);
             return res;

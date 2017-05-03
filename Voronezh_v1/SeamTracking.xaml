@@ -30,6 +30,40 @@
                     Margin="5"
                     Click="bt_stop_Click">
             </Button>
+            <Button Name="bt_l1"
+                    Content="l1"
+                    Margin="5"
+                    Click="bt_l1_Click">
+            </Button>
+            <Button Name="bt_l2"
+                    Content="l2"
+                    Margin="5"
+                    Click="bt_l2_Click">
+            </Button>
+            <Button Name="bt_l3"
+                    Content="l3"
+                    Margin="5"
+                    Click="bt_l3_Click">
+            </Button>
+            <Button Name="bt_l4"
+                    Content="l4"
+                    Margin="5"
+                    Click="bt_l4_Click">
+            </Button>
+            <Button Name="bt_calc"
+                    Content="calc"
+                    Margin="5"
+                    Click="bt_cal_Click">
+            </Button>
+            <Button Name="bt_one"
+                    Content="one point trance"
+                    Margin="5"
+                    Click="bt_oneP_Click">
+            </Button>
+            <TextBox Name="tb_strRecive"
+                     Height="300"
+                     TextWrapping="Wrap" 
+                     AcceptsReturn="True"></TextBox>
         </StackPanel>
     </Grid>
 </Window>

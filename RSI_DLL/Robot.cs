@@ -37,12 +37,13 @@ namespace RSI_DLL {
             sw.Start();
 
             if (first) {
-                RX = ParserXML.GetValues(strRecive, new string[] { "Rob", "RIst", "X" }) + 200;
+                RX = ParserXML.GetValues(strRecive, new string[] { "Rob", "RIst", "X" });
                 RY = ParserXML.GetValues(strRecive, new string[] { "Rob", "RIst", "Y" });
                 RZ = ParserXML.GetValues(strRecive, new string[] { "Rob", "RIst", "Z" });
                 RA = ParserXML.GetValues(strRecive, new string[] { "Rob", "RIst", "A" });
                 RB = ParserXML.GetValues(strRecive, new string[] { "Rob", "RIst", "B" });
                 RC = ParserXML.GetValues(strRecive, new string[] { "Rob", "RIst", "C" });
+                first = false;
             }
 
 
@@ -50,16 +51,15 @@ namespace RSI_DLL {
 
 
             if (single._MAP.Count != 0) {
-                if (RX >= 9.5245 + 200) {
-                    first = false;
-                }
+                //if (RX >= 9.5245) {
+                //    first = false;
+                //}
                 int index = prevIndex;
                 while (index < single._MAP.Count && RX > single._MAP[index].X) {
                     index++;
                 }
                 prevIndex = index;
                 if (index < single._MAP.Count) {
-                    if (!first) {
                         double sum = Math.Abs(single._MAP[index].X - RX) + Math.Abs(single._MAP[index].Y - RY) + Math.Abs(single._MAP[index].Z - RZ);
                         double xProc = (single._MAP[index].X - RX) / sum;
                         double yProc = (single._MAP[index].Y - RY) / sum;
@@ -75,13 +75,75 @@ namespace RSI_DLL {
                         RX += xProc * _oneCor;
                         RY += yProc * _oneCor;
                         RZ += zProc * _oneCor;
-                    }
+                    
                 } else {
                     //ParserXML.SetValue(ref strSend, "Sen\\RKorr\\X", _oneCor);
                     //RX +=  _oneCor;e
                     exit = true;
                 }
             }
+            int work = (int)ParserXML.GetValues(strRecive, "Rob\\Work");
+            single.work = work;
+            if (exit) {
+                ParserXML.SetValue(ref strSend, "Sen\\Exit", 1);
+            }
+            sw.Stop();
+            // Console.WriteLine(sw.ElapsedMilliseconds);
+            return strSend;
+        }
+        private string _defaultDelegate2(string strRecive, string strSend) {
+
+            Stopwatch sw = new Stopwatch();
+            sw.Start();
+
+            if (first) {
+                RX = ParserXML.GetValues(strRecive, new string[] { "Rob", "RIst", "X" });
+                RY = ParserXML.GetValues(strRecive, new string[] { "Rob", "RIst", "Y" });
+                RZ = ParserXML.GetValues(strRecive, new string[] { "Rob", "RIst", "Z" });
+                RA = ParserXML.GetValues(strRecive, new string[] { "Rob", "RIst", "A" });
+                RB = ParserXML.GetValues(strRecive, new string[] { "Rob", "RIst", "B" });
+                RC = ParserXML.GetValues(strRecive, new string[] { "Rob", "RIst", "C" });
+                first = false;
+            }
+
+
+            single.Position = new RPoint(RX, RY, RZ, RA, RB, RC);
+
+
+            if (single._MAP.Count != 0) {
+                //if (RX >= 9.5245) {
+                //    first = false;
+                //}
+                int index = prevIndex;
+                while (index < single._MAP.Count && RX > single._MAP[index].X) {
+                    index++;
+                }
+                prevIndex = index;
+                if (index < single._MAP.Count) {
+                    double sum = Math.Abs(single._MAP[index].X - RX) + Math.Abs(single._MAP[index].Y - RY) + Math.Abs(single._MAP[index].Z - RZ);
+                    double xProc = (single._MAP[index].X - RX) / sum;
+                    double yProc = (single._MAP[index].Y - RY) / sum;
+                    double zProc = (single._MAP[index].Z - RZ) / sum;
+
+
+                    //Console.WriteLine(xProc);
+
+
+                    ParserXML.SetValue(ref strSend, "Sen\\RKorr\\X", xProc * _oneCor);
+                    ParserXML.SetValue(ref strSend, "Sen\\RKorr\\Y", yProc * _oneCor);
+                    ParserXML.SetValue(ref strSend, "Sen\\RKorr\\Z", zProc * _oneCor);
+                    RX += xProc * _oneCor;
+                    RY += yProc * _oneCor;
+                    RZ += zProc * _oneCor;
+
+                } else {
+                    //ParserXML.SetValue(ref strSend, "Sen\\RKorr\\X", _oneCor);
+                    //RX +=  _oneCor;e
+                    exit = true;
+                }
+            }
+            int work = (int)ParserXML.GetValues(strRecive, "Rob\\Work");
+            single.work = work;
             if (exit) {
                 ParserXML.SetValue(ref strSend, "Sen\\Exit", 1);
             }
@@ -111,10 +173,17 @@ namespace RSI_DLL {
             s.recive_p = new RPoint(x, y, z, a, b, c);
 
             int work = (int)ParserXML.GetValues(strRecive, "Rob\\Work");
-            s.work = Convert.ToBoolean(work);
+            s.work = work;
+           // s.rec = work;
+           // s.work = Convert.ToBoolean(work == 1);
+           //// Console.WriteLine($"s.work = {s.work}  |||   work = {work}");
+           // if (work == 1) {
+           //    // Console.WriteLine("WORK BITCH!");
+           // }
             if (exit) {
                 ParserXML.SetValue(ref strSend, "Sen\\Exit", 1);
             }
+            s.StrRecive = strRecive;
 
             return strSend;
         }
@@ -169,7 +238,15 @@ namespace RSI_DLL {
 
                         strSend = mirrorIPOC(strReceive, strSend);
                         //strSend = Correction(strReceive, strSend);
-                        strSend = GetData(strReceive, strSend);
+
+                     
+                        if (s.rec == 4) {
+                            strSend = _defaultDelegate(strReceive, strSend);
+                        } else if (s.rec == 9) 
+                        {
+                            strSend = GetData(strReceive, strSend);
+                        }
+                        s.StrRecive = strReceive;
 
 
 

@@ -66,6 +66,7 @@
   <ItemGroup>
     <Compile Include="CLLTI.cs" />
     <Compile Include="Laser.cs" />
+    <Compile Include="Laser2.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

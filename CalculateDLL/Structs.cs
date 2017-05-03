@@ -15,6 +15,14 @@ namespace CalculateDLL {
         public override string ToString() {
             return $"{X}|{Z}";
         }
+        public static bool operator == (LPoint c1, LPoint c2) {
+            return c1.Equals(c2);
+        }
+
+        public static bool operator != (LPoint c1, LPoint c2) {
+            return !c1.Equals(c2);
+        }
+
     }
     public struct RPointCoordinates {
         public double X;

@@ -19,7 +19,16 @@ namespace CalculateDLL {
         public List<RPoint> _MAP;
         public RPoint Position;
         public RPoint recive_p;
-        public bool work = false;
+        public int work;
+        public int rec;
+
+        private string _strRecive;
+
+        public string StrRecive {
+            get { return _strRecive; }
+            set { _strRecive = value; }
+        }
+
 
         public static Singleton GetInstance() {
             return instance;

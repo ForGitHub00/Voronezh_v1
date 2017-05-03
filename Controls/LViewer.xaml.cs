@@ -22,12 +22,12 @@ namespace Controls {
     /// Логика взаимодействия для LViewer.xaml
     /// </summary>
     public partial class LViewer : UserControl {
-        public LViewer() {
+        public LViewer(string Title = "Laser 2D") {
             InitializeComponent();
             Data = new LasViewer();
             DataContext = Data;
 
-            win = new Window();
+            win = new Window() { Title = Title};
             Grid gr = new Grid();
             win.Content = gr;
             gr.Children.Add(this);

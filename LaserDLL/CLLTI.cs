@@ -95,6 +95,26 @@ namespace LaserDLL {
             scanCONTROL2751_100 = 1021,           //scanCONTROL27xx with 100mm measurmentrange
             scanCONTROL2702_50 = 1032,           //scanCONTROL2702 with 50mm measurement range
             scanCONTROL27xx_xxx = 1999,           //scanCONTROL27xx with no measurmentrange -> use standard measurmentrange
+
+
+            scanCONTROL26xx_25 = 2000,           //scanCONTROL26xx with 25mm measurmentrange
+            scanCONTROL26xx_100 = 2001,           //scanCONTROL26xx with 100mm measurmentrange
+            scanCONTROL26xx_50 = 2002,           //scanCONTROL26xx with 50mm measurmentrange
+            scanCONTROL2651_25 = 2020,           //scanCONTROL26xx with 25mm measurmentrange
+            scanCONTROL2651_100 = 2021,           //scanCONTROL26xx with 100mm measurmentrange
+            scanCONTROL2602_50 = 2032,           //scanCONTROL2602 with 50mm measurement range
+            scanCONTROL26xx_xxx = 2999,           //scanCONTROL26xx with no measurmentrange -> use standard measurmentrange
+
+            scanCONTROL29xx_25 = 3000,           //scanCONTROL29xx with 25mm measurmentrange
+            scanCONTROL29xx_100 = 3001,           //scanCONTROL29xx with 100mm measurmentrange
+            scanCONTROL29xx_50 = 3002,           //scanCONTROL29xx with 50mm measurmentrange
+            scanCONTROL2951_25 = 3020,           //scanCONTROL29xx with 25mm measurmentrange
+            scanCONTROL2951_100 = 3021,           //scanCONTROL29xx with 100mm measurmentrange
+            scanCONTROL2902_50 = 3032,           //scanCONTROL2902 with 50mm measurement range
+            scanCONTROL2953_30 = 3033,           //scanCONTROL2953 with 30mm measurement range
+            scanCONTROL29xx_xxx = 3999,           //scanCONTROL29xx with no measurmentrange -> use standard measurmentrange
+            scanCONTROL2xxx = 4000,           //scanCONTROL2xxx with 100mm measurmentrange
+
         }
 
         //specify the profile configuration

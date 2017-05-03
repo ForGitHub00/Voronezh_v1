@@ -2,6 +2,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace LaserDLL {
     public class Laser {
@@ -13,6 +16,7 @@ namespace LaserDLL {
         static public uint m_uiResolution = 0;
         static public uint m_hLLT = 0;
         static public CLLTI.TScannerType m_tscanCONTROLType;
+        static public uint toggle = 0;
 
         [STAThread]
         public static void main() {
@@ -33,25 +37,163 @@ namespace LaserDLL {
             m_hLLT = CLLTI.CreateLLTDevice(CLLTI.TInterfaceType.INTF_TYPE_ETHERNET);
             CLLTI.SetDeviceInterface(m_hLLT, 3232240897, 0);
             CLLTI.Connect(m_hLLT);
-            CLLTI.SetFeature(m_hLLT, CLLTI.FEATURE_FUNCTION_SERIAL, 214020058);
-            CLLTI.SetFeature(m_hLLT, CLLTI.FEATURE_FUNCTION_LASERPOWER, 2);
-            CLLTI.SetFeature(m_hLLT, CLLTI.FEATURE_FUNCTION_MEASURINGFIELD, 0);
-            CLLTI.SetFeature(m_hLLT, CLLTI.FEATURE_FUNCTION_TRIGGER, 0);      //0
-            CLLTI.SetFeature(m_hLLT, CLLTI.FEATURE_FUNCTION_SHUTTERTIME, 1);  //100
-            CLLTI.SetFeature(m_hLLT, CLLTI.FEATURE_FUNCTION_IDLETIME, 3999);  //900
-            CLLTI.SetFeature(m_hLLT, CLLTI.FEATURE_FUNCTION_PROCESSING_PROFILEDATA, 2639);
-            CLLTI.SetFeature(m_hLLT, CLLTI.FEATURE_FUNCTION_THRESHOLD, 3200);
-            CLLTI.SetFeature(m_hLLT, CLLTI.FEATURE_FUNCTION_MAINTENANCEFUNCTIONS, 2);
-            CLLTI.SetFeature(m_hLLT, CLLTI.FEATURE_FUNCTION_ANALOGFREQUENCY, 2);
-            CLLTI.SetFeature(m_hLLT, CLLTI.FEATURE_FUNCTION_ANALOGOUTPUTMODES, 2);
-            CLLTI.SetFeature(m_hLLT, CLLTI.FEATURE_FUNCTION_CMMTRIGGER, 0);
-            CLLTI.SetFeature(m_hLLT, CLLTI.FEATURE_FUNCTION_REARRANGEMENT_PROFILE, 2149096449);
-            CLLTI.SetFeature(m_hLLT, CLLTI.FEATURE_FUNCTION_PROFILE_FILTER, 0);
-            CLLTI.SetFeature(m_hLLT, CLLTI.FEATURE_FUNCTION_RS422_INTERFACE_FUNCTION, 4);
-            CLLTI.SetFeature(m_hLLT, CLLTI.FEATURE_FUNCTION_SATURATION, 4);
-            CLLTI.SetFeature(m_hLLT, CLLTI.FEATURE_FUNCTION_TEMPERATURE, 3034);
-            CLLTI.SetFeature(m_hLLT, CLLTI.FEATURE_FUNCTION_CAPTURE_QUALITY, 3034);
-            CLLTI.SetFeature(m_hLLT, CLLTI.FEATURE_FUNCTION_SHARPNESS, 0);
+
+
+            uint t = 0;
+
+            //Console.WriteLine("FFFFFFFFFFFFFF");
+            //CLLTI.GetFeature(m_hLLT, CLLTI.INQUIRY_FUNCTION_MEASURINGFIELD, ref t);
+            //CLLTI.SetFeature(m_hLLT, CLLTI.INQUIRY_FUNCTION_MEASURINGFIELD, t);
+            //Console.WriteLine(t);
+
+
+            Type tt = typeof(CLLTI);
+            var mas = tt.GetFields();
+            foreach (var item in mas) {
+                if (item.Name.Contains("FEATURE") || item.Name.Contains("INQUIRY")) {
+                    FieldInfo fi = typeof(CLLTI).GetField(item.Name);
+                    object fieldValue = fi.GetValue(t);
+                    CLLTI.GetFeature(m_hLLT, (uint)fieldValue, ref t);
+                    CLLTI.SetFeature(m_hLLT, (uint)fieldValue, t);
+                    //Console.WriteLine($"{item.Name}");
+                }
+                //Console.WriteLine($"{item.Name}");
+            }
+
+            //Console.WriteLine("FFFFFFFFFFFFFF");
+            //CLLTI.GetFeature(m_hLLT, CLLTI.FEATURE_FUNCTION_LASERPOWER, ref t);
+            //CLLTI.SetFeature(m_hLLT, CLLTI.FEATURE_FUNCTION_LASERPOWER, t);
+            //Console.WriteLine(t);
+            //CLLTI.GetFeature(m_hLLT, CLLTI.FEATURE_FUNCTION_MEASURINGFIELD, ref t);
+            //CLLTI.SetFeature(m_hLLT, CLLTI.FEATURE_FUNCTION_MEASURINGFIELD, t);
+            //Console.WriteLine(t);
+            //CLLTI.GetFeature(m_hLLT, CLLTI.FEATURE_FUNCTION_TRIGGER, ref t);
+            //CLLTI.SetFeature(m_hLLT, CLLTI.FEATURE_FUNCTION_TRIGGER, t);
+            //Console.WriteLine(t);
+            //CLLTI.GetFeature(m_hLLT, CLLTI.FEATURE_FUNCTION_SHUTTERTIME, ref t);
+            //CLLTI.SetFeature(m_hLLT, CLLTI.FEATURE_FUNCTION_SHUTTERTIME, t);
+            //Console.WriteLine(t);
+            //CLLTI.GetFeature(m_hLLT, CLLTI.FEATURE_FUNCTION_IDLETIME, ref t);
+            //CLLTI.SetFeature(m_hLLT, CLLTI.FEATURE_FUNCTION_IDLETIME, t);
+            //Console.WriteLine(t);
+            //CLLTI.GetFeature(m_hLLT, CLLTI.FEATURE_FUNCTION_PROCESSING_PROFILEDATA, ref t);
+            //CLLTI.SetFeature(m_hLLT, CLLTI.FEATURE_FUNCTION_PROCESSING_PROFILEDATA, t);
+            //Console.WriteLine(t);
+            //CLLTI.GetFeature(m_hLLT, CLLTI.FEATURE_FUNCTION_THRESHOLD, ref t);
+            //CLLTI.SetFeature(m_hLLT, CLLTI.FEATURE_FUNCTION_THRESHOLD, t);
+            //Console.WriteLine(t);
+            //CLLTI.GetFeature(m_hLLT, CLLTI.FEATURE_FUNCTION_MAINTENANCEFUNCTIONS, ref t);
+            //CLLTI.SetFeature(m_hLLT, CLLTI.FEATURE_FUNCTION_MAINTENANCEFUNCTIONS, t);
+            //Console.WriteLine(t);
+            //CLLTI.GetFeature(m_hLLT, CLLTI.FEATURE_FUNCTION_ANALOGFREQUENCY, ref t);
+            //CLLTI.SetFeature(m_hLLT, CLLTI.FEATURE_FUNCTION_ANALOGFREQUENCY, t);
+            //Console.WriteLine(t);
+            //CLLTI.GetFeature(m_hLLT, CLLTI.FEATURE_FUNCTION_ANALOGOUTPUTMODES, ref t);
+            //CLLTI.SetFeature(m_hLLT, CLLTI.FEATURE_FUNCTION_ANALOGOUTPUTMODES, t);
+            //Console.WriteLine(t);
+            //CLLTI.GetFeature(m_hLLT, CLLTI.FEATURE_FUNCTION_CMMTRIGGER, ref t);
+            //CLLTI.SetFeature(m_hLLT, CLLTI.FEATURE_FUNCTION_CMMTRIGGER, t);
+            //Console.WriteLine(t);
+            //CLLTI.GetFeature(m_hLLT, CLLTI.FEATURE_FUNCTION_REARRANGEMENT_PROFILE, ref t);
+            //CLLTI.SetFeature(m_hLLT, CLLTI.FEATURE_FUNCTION_REARRANGEMENT_PROFILE, t);
+            // Console.WriteLine(t);
+            //CLLTI.GetFeature(m_hLLT, CLLTI.FEATURE_FUNCTION_PROFILE_FILTER, ref t);
+            //CLLTI.SetFeature(m_hLLT, CLLTI.FEATURE_FUNCTION_PROFILE_FILTER, t);
+            //Console.WriteLine(t);
+            //CLLTI.GetFeature(m_hLLT, CLLTI.FEATURE_FUNCTION_RS422_INTERFACE_FUNCTION, ref t);
+            //CLLTI.SetFeature(m_hLLT, CLLTI.FEATURE_FUNCTION_RS422_INTERFACE_FUNCTION, t);
+            //Console.WriteLine(t);
+            //CLLTI.GetFeature(m_hLLT, CLLTI.FEATURE_FUNCTION_SATURATION, ref t);
+            //CLLTI.SetFeature(m_hLLT, CLLTI.FEATURE_FUNCTION_SATURATION, t);
+            //Console.WriteLine(t);
+            //CLLTI.GetFeature(m_hLLT, CLLTI.FEATURE_FUNCTION_TEMPERATURE, ref t);
+            //CLLTI.SetFeature(m_hLLT, CLLTI.FEATURE_FUNCTION_TEMPERATURE, t);
+            //Console.WriteLine(t);
+            //CLLTI.GetFeature(m_hLLT, CLLTI.FEATURE_FUNCTION_CAPTURE_QUALITY, ref t);
+            //CLLTI.SetFeature(m_hLLT, CLLTI.FEATURE_FUNCTION_CAPTURE_QUALITY, t);
+            //Console.WriteLine(t);
+            //CLLTI.GetFeature(m_hLLT, CLLTI.FEATURE_FUNCTION_SHARPNESS, ref t);
+            //CLLTI.SetFeature(m_hLLT, CLLTI.FEATURE_FUNCTION_SHARPNESS, t);
+            //Console.WriteLine(t);
+
+
+
+            //CLLTI.GetFeature(m_hLLT, CLLTI.INQUIRY_FUNCTION_LASERPOWER, ref t);
+            //CLLTI.SetFeature(m_hLLT, CLLTI.INQUIRY_FUNCTION_LASERPOWER, t);
+            //Console.WriteLine(t);
+            //CLLTI.GetFeature(m_hLLT, CLLTI.INQUIRY_FUNCTION_MEASURINGFIELD, ref t);
+            //CLLTI.SetFeature(m_hLLT, CLLTI.INQUIRY_FUNCTION_MEASURINGFIELD, t);
+            //Console.WriteLine(t);
+            //CLLTI.GetFeature(m_hLLT, CLLTI.INQUIRY_FUNCTION_TRIGGER, ref t);
+            //CLLTI.SetFeature(m_hLLT, CLLTI.INQUIRY_FUNCTION_TRIGGER, t);
+            //Console.WriteLine(t);
+            //CLLTI.GetFeature(m_hLLT, CLLTI.INQUIRY_FUNCTION_SHUTTERTIME, ref t);
+            //CLLTI.SetFeature(m_hLLT, CLLTI.INQUIRY_FUNCTION_SHUTTERTIME, t);
+            //Console.WriteLine(t);
+            //CLLTI.GetFeature(m_hLLT, CLLTI.INQUIRY_FUNCTION_IDLETIME, ref t);
+            //CLLTI.SetFeature(m_hLLT, CLLTI.INQUIRY_FUNCTION_IDLETIME, t);
+            //Console.WriteLine(t);
+            //CLLTI.GetFeature(m_hLLT, CLLTI.INQUIRY_FUNCTION_PROCESSING_PROFILEDATA, ref t);
+            //CLLTI.SetFeature(m_hLLT, CLLTI.INQUIRY_FUNCTION_PROCESSING_PROFILEDATA, t);
+            //Console.WriteLine(t);
+            //CLLTI.GetFeature(m_hLLT, CLLTI.INQUIRY_FUNCTION_THRESHOLD, ref t);
+            //CLLTI.SetFeature(m_hLLT, CLLTI.INQUIRY_FUNCTION_THRESHOLD, t);
+            //Console.WriteLine(t);
+            //CLLTI.GetFeature(m_hLLT, CLLTI.INQUIRY_FUNCTION_MAINTENANCEFUNCTIONS, ref t);
+            //CLLTI.SetFeature(m_hLLT, CLLTI.INQUIRY_FUNCTION_MAINTENANCEFUNCTIONS, t);
+            //Console.WriteLine(t);
+            //CLLTI.GetFeature(m_hLLT, CLLTI.INQUIRY_FUNCTION_ANALOGFREQUENCY, ref t);
+            //CLLTI.SetFeature(m_hLLT, CLLTI.INQUIRY_FUNCTION_ANALOGFREQUENCY, t);
+            //Console.WriteLine(t);
+            //CLLTI.GetFeature(m_hLLT, CLLTI.INQUIRY_FUNCTION_ANALOGOUTPUTMODES, ref t);
+            //CLLTI.SetFeature(m_hLLT, CLLTI.INQUIRY_FUNCTION_ANALOGOUTPUTMODES, t);
+            //Console.WriteLine(t);
+            //CLLTI.GetFeature(m_hLLT, CLLTI.INQUIRY_FUNCTION_CMMTRIGGER, ref t);
+            //CLLTI.SetFeature(m_hLLT, CLLTI.INQUIRY_FUNCTION_CMMTRIGGER, t);
+            //Console.WriteLine(t);
+            //CLLTI.GetFeature(m_hLLT, CLLTI.INQUIRY_FUNCTION_REARRANGEMENT_PROFILE, ref t);
+            //CLLTI.SetFeature(m_hLLT, CLLTI.INQUIRY_FUNCTION_REARRANGEMENT_PROFILE, t);
+            //Console.WriteLine(t);
+            //CLLTI.GetFeature(m_hLLT, CLLTI.INQUIRY_FUNCTION_PROFILE_FILTER, ref t);
+            //CLLTI.SetFeature(m_hLLT, CLLTI.INQUIRY_FUNCTION_PROFILE_FILTER, t);
+            //Console.WriteLine(t);
+            //CLLTI.GetFeature(m_hLLT, CLLTI.INQUIRY_FUNCTION_RS422_INTERFACE_FUNCTION, ref t);
+            //CLLTI.SetFeature(m_hLLT, CLLTI.INQUIRY_FUNCTION_RS422_INTERFACE_FUNCTION, t);
+            //Console.WriteLine(t);
+            //CLLTI.GetFeature(m_hLLT, CLLTI.INQUIRY_FUNCTION_SATURATION, ref t);
+            //CLLTI.SetFeature(m_hLLT, CLLTI.INQUIRY_FUNCTION_SATURATION, t);
+            //Console.WriteLine(t);
+            //CLLTI.GetFeature(m_hLLT, CLLTI.INQUIRY_FUNCTION_TEMPERATURE, ref t);
+            //CLLTI.SetFeature(m_hLLT, CLLTI.INQUIRY_FUNCTION_TEMPERATURE, t);
+            //Console.WriteLine(t);
+            //CLLTI.GetFeature(m_hLLT, CLLTI.INQUIRY_FUNCTION_CAPTURE_QUALITY, ref t);
+            //CLLTI.SetFeature(m_hLLT, CLLTI.INQUIRY_FUNCTION_CAPTURE_QUALITY, t);
+            //Console.WriteLine(t);
+            //CLLTI.GetFeature(m_hLLT, CLLTI.INQUIRY_FUNCTION_SHARPNESS, ref t);
+            //CLLTI.SetFeature(m_hLLT, CLLTI.INQUIRY_FUNCTION_SHARPNESS, t);
+            //Console.WriteLine(t);
+
+
+            //CLLTI.SetFeature(m_hLLT, CLLTI.FEATURE_FUNCTION_SERIAL, 214020058);
+            //CLLTI.SetFeature(m_hLLT, CLLTI.FEATURE_FUNCTION_LASERPOWER, 2);
+            //CLLTI.SetFeature(m_hLLT, CLLTI.FEATURE_FUNCTION_MEASURINGFIELD, 0);
+            //CLLTI.SetFeature(m_hLLT, CLLTI.FEATURE_FUNCTION_TRIGGER, 16777316);      //0
+            //CLLTI.SetFeature(m_hLLT, CLLTI.FEATURE_FUNCTION_SHUTTERTIME, 1);  //1
+            //CLLTI.SetFeature(m_hLLT, CLLTI.FEATURE_FUNCTION_IDLETIME, 3900);  //3999
+            //CLLTI.SetFeature(m_hLLT, CLLTI.FEATURE_FUNCTION_PROCESSING_PROFILEDATA, 623);
+            //CLLTI.SetFeature(m_hLLT, CLLTI.FEATURE_FUNCTION_THRESHOLD, 3200);
+            //CLLTI.SetFeature(m_hLLT, CLLTI.FEATURE_FUNCTION_MAINTENANCEFUNCTIONS, 2);
+            //CLLTI.SetFeature(m_hLLT, CLLTI.FEATURE_FUNCTION_ANALOGFREQUENCY, 2);
+            //CLLTI.SetFeature(m_hLLT, CLLTI.FEATURE_FUNCTION_ANALOGOUTPUTMODES, 2);
+            //CLLTI.SetFeature(m_hLLT, CLLTI.FEATURE_FUNCTION_CMMTRIGGER, 0);
+            //CLLTI.SetFeature(m_hLLT, CLLTI.FEATURE_FUNCTION_REARRANGEMENT_PROFILE, 2149096449);
+            //CLLTI.SetFeature(m_hLLT, CLLTI.FEATURE_FUNCTION_PROFILE_FILTER, 0);
+            //CLLTI.SetFeature(m_hLLT, CLLTI.FEATURE_FUNCTION_RS422_INTERFACE_FUNCTION, 4);
+            //CLLTI.SetFeature(m_hLLT, CLLTI.FEATURE_FUNCTION_SATURATION, 4);
+            //CLLTI.SetFeature(m_hLLT, CLLTI.FEATURE_FUNCTION_TEMPERATURE, 3034);
+            //CLLTI.SetFeature(m_hLLT, CLLTI.FEATURE_FUNCTION_CAPTURE_QUALITY, 3034);
+            //CLLTI.SetFeature(m_hLLT, CLLTI.FEATURE_FUNCTION_SHARPNESS, 0);
+            //// CLLTI.SetFeature(m_hLLT, CLLTI.FEATURE_FUNCTION_MEASURINGFIELD, 0);
 
 
             CLLTI.GetLLTType(m_hLLT, ref m_tscanCONTROLType);
@@ -62,10 +204,41 @@ namespace LaserDLL {
             CLLTI.SetResolution(m_hLLT, m_uiResolution);
             CLLTI.SetProfileConfig(m_hLLT, CLLTI.TProfileConfig.PROFILE);
 
-            CLLTI.SetFeature(m_hLLT, CLLTI.FEATURE_FUNCTION_SHUTTERTIME, uiShutterTime);
-            CLLTI.SetFeature(m_hLLT, CLLTI.FEATURE_FUNCTION_IDLETIME, uiIdleTime);
+            //CLLTI.SetFeature(m_hLLT, CLLTI.FEATURE_FUNCTION_SHUTTERTIME, uiShutterTime);
+            //CLLTI.SetFeature(m_hLLT, CLLTI.FEATURE_FUNCTION_IDLETIME, uiIdleTime);
+
+
+
+            //ushort start_z = 20000;
+            //ushort size_z = 25000;
+            //ushort start_x = 20000;
+            //ushort size_x = 25000;
+            //WriteCommand(0, 0); // Reset
+            //WriteCommand(0, 0); // Initialization
+            //WriteCommand(2, 8); // Navigate in register
+            //WriteValue2Register(start_z);
+            //WriteValue2Register(size_z);
+            //WriteValue2Register(start_x);
+            //WriteValue2Register(size_x);
+            // WriteCommand(0, 0); // Stop writing process
 
         }
+        public static void WriteCommand(uint command, uint data) {
+            CLLTI.SetFeature(m_hLLT, CLLTI.FEATURE_FUNCTION_SHARPNESS,
+            (uint)(command << 9) + (toggle << 8) + data);
+            if (toggle == 1) {
+                toggle = 0;
+            } 
+            else {
+                toggle = 1;
+            }
+        }
+        // Write value to register position
+        static void WriteValue2Register(ushort value) {
+            WriteCommand(1, (uint)(value / 256));
+            WriteCommand(1, (uint)(value % 256));
+        }
+
 
         public static void GetProfile(out double[] adValueX, out double[] adValueZ) {
             int iRetValue;
@@ -206,7 +379,7 @@ namespace LaserDLL {
                     }
                 }
                 if (countPointsOnline(data, start, finish, diff, s: 1) && dist) {
-                    line = true;                   
+                    line = true;
                     finish++;
                 } else {
                     if (!line) {
@@ -225,6 +398,49 @@ namespace LaserDLL {
             if (line) {
                 result.Add(data[start]);
                 result.Add(data[dataCount - 1]);
+            }
+            return result;
+        }
+        public static List<int> GetLinesByIndexes(List<LPoint> data, double maxDistance = 3, double diff = 1, int minLineLenght = 10) {
+            List<int> result = new List<int>();
+            int dataCount = data.Count;
+            int tempCount = 0;
+            int tempLenght = minLineLenght;
+            bool line = false;
+            int index = 0;
+
+
+            int start = 0;
+            int finish = minLineLenght;
+
+            while (finish < dataCount) {
+                bool dist = true;
+                for (int i = start; i < finish - 1; i++) {
+                    if (distanceBetweenTwoPoints(data[i], data[i + 1]) > maxDistance) {
+                        dist = false;
+                        break;
+                    }
+                }
+                if (countPointsOnline(data, start, finish, diff, s: 1) && dist) {
+                    line = true;
+                    finish++;
+                } else {
+                    if (!line) {
+                        start++;
+                        finish = start + minLineLenght;
+                    } else {
+                        line = false;
+                        result.Add(start);
+                        result.Add(finish - 1);
+                        start = finish;
+                        finish = start + minLineLenght;
+                    }
+
+                }
+            }
+            if (line) {
+                result.Add(start);
+                result.Add(dataCount - 1);
             }
             return result;
         }
@@ -261,7 +477,7 @@ namespace LaserDLL {
                         start = finish;
                         finish = start + minLineLenght;
                     }
-                   
+
                 }
             }
             if (line) {
@@ -355,23 +571,23 @@ namespace LaserDLL {
 
         }
         public static double pointOnLine(LPoint left, LPoint right, LPoint cur) {
-            if (true) {
-                double x = cur.X;
-                double y = cur.Z;
-                double x1 = left.X;
-                double y1 = left.Z;
-                double x2 = right.X;
-                double y2 = right.Z;
+
+            double x = cur.X;
+            double y = cur.Z;
+            double x1 = left.X;
+            double y1 = left.Z;
+            double x2 = right.X;
+            double y2 = right.Z;
 
 
 
 
-                double tx = (x - x1) * (y2 - y1);
-                double ty = (y - y1) * (x2 - x1);
+            double tx = (x - x1) * (y2 - y1);
+            double ty = (y - y1) * (x2 - x1);
 
-                // Console.WriteLine(tx - ty);
-                return Math.Abs(tx - ty);
-            }
+            // Console.WriteLine(tx - ty);
+            return Math.Abs(tx - ty);
+
         }
         private static int countPointsOnline(List<LPoint> data, int start, int finish, double diff = 1) {
             int result = 0;
@@ -410,6 +626,65 @@ namespace LaserDLL {
             return result;
         }
 
+        public static List<LPoint> LineAprox(List<LPoint> data) {
+            List<LPoint> result = new List<LPoint>();
+            double a;
+            double b;
+            (a, b) = GetApprox(data.Select(t => t.X).ToArray(), data.Select(t => t.Z).ToArray());
+            for (int i = 0; i < data.Count; i++) {
+                result.Add(new LPoint(data[i].X, a * data[i].X + b));
+            }
+            return result;
+
+            (double a1, double b1) GetApprox(double[] x, double[] y)
+            {
+                double sumx = 0;
+                double sumy = 0;
+                double sumx2 = 0;
+                double sumxy = 0;
+                int n = x.Length;
+                for (int i = 0; i < n; i++) {
+                    sumx += x[i];
+                    sumy += y[i];
+                    sumx2 += x[i] * x[i];
+                    sumxy += x[i] * y[i];
+                }
+                double a1 = (n * sumxy - (sumx * sumy)) / (n * sumx2 - sumx * sumx);
+                double b1 = (sumy - a1 * sumx) / n;
+                return (a1, b1);
+            }
+        }
+        public static List<LPoint> LineAproxPar(List<LPoint> data, out List<double> par) {
+            List<LPoint> result = new List<LPoint>();
+            par = new List<double>();
+            double a;
+            double b;
+            (a, b) = GetApprox(data.Select(t => t.X).ToArray(), data.Select(t => t.Z).ToArray());
+            par.Add(a);
+            par.Add(b);
+            for (int i = 0; i < data.Count; i++) {
+                result.Add(new LPoint(data[i].X, a * data[i].X + b));
+            }
+            return result;
+
+            (double a1, double b1) GetApprox(double[] x, double[] y)
+            {
+                double sumx = 0;
+                double sumy = 0;
+                double sumx2 = 0;
+                double sumxy = 0;
+                int n = x.Length;
+                for (int i = 0; i < n; i++) {
+                    sumx += x[i];
+                    sumy += y[i];
+                    sumx2 += x[i] * x[i];
+                    sumxy += x[i] * y[i];
+                }
+                double a1 = (n * sumxy - (sumx * sumy)) / (n * sumx2 - sumx * sumx);
+                double b1 = (sumy - a1 * sumx) / n;
+                return (a1, b1);
+            }
+        }
     }
     public static class LVoronej {
         public static LPoint Type1_1point(List<LPoint> data, double lifting = 0) {
